@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -24,6 +26,10 @@ public class ProtoTypeForClientApplication implements CommandLineRunner {
         SpringApplication.run(ProtoTypeForClientApplication.class, args);
     }
 
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Override
     public void run(String... args) throws Exception {
@@ -36,11 +42,10 @@ public class ProtoTypeForClientApplication implements CommandLineRunner {
                 new Customer("cucu", "cucu", "1234", "cucu@gmail.com", Collections.singleton(RoleEnum.USER)),
                 new Customer("admin", "admin", "1234", "admin@gmail.com", col));
         listCust.stream().forEach(p -> customerRepository.save(p));
-        customerRepository.findAll().stream().map(c-> c.getEmail()).forEach(System.out::println);
+        customerRepository.findAll().stream().map(c -> c.getEmail()).forEach(System.out :: println);
         System.out.println("******************");
-        Stream.of(new Task("task1"), new Task("task2"),new Task("task3"), new Task("task4")).forEach(t ->taskRepository.save(t));
-        taskRepository.findAll().stream().map(t->t.getMessage()).forEach(System.out::println);
-
+        Stream.of(new Task("task1"), new Task("task2"), new Task("task3"), new Task("task4")).forEach(t -> taskRepository.save(t));
+        taskRepository.findAll().stream().map(t -> t.getMessage()).forEach(System.out :: println);
 
 
     }

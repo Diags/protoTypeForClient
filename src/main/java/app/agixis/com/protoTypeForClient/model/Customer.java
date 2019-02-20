@@ -13,11 +13,13 @@ public class Customer implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private  Long id;
+    @Column(nullable = false)
     private String name;
     private String lastName;
     private String passeWord;
     @NotBlank
     @Email(message = "please email must be correct")
+    @Column(unique = true, nullable = false)
     private String email;
     @ElementCollection(targetClass = RoleEnum.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_genres", joinColumns = @JoinColumn(name = "customer_id"))

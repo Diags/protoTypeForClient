@@ -22,7 +22,7 @@ public class CustomerController {
 
     @PostMapping("/signin")
     public Customer signUp(@RequestBody FormSignUpDto form) {
-        Customer user = customerRepository.findByEmail(form.getEmail());
+        Customer user = customerRepository.findByNameOrEmail(form.getEmail());
         if (user == null) {
             throw new UsernameNotFoundException("this user doesnot existe please register" + form.getEmail());
         }
@@ -31,7 +31,7 @@ public class CustomerController {
 
     @PostMapping("/register")
     public Customer register(@RequestBody FormRegisterDto form) {
-        Customer user = customerRepository.findByEmail(form.getEmail());
+        Customer user = customerRepository.findByNameOrEmail(form.getEmail());
         if (user != null) {
             throw new UsernameNotFoundException("this user  exists  please register with" + form.getEmail());
         }

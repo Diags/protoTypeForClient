@@ -1,23 +1,23 @@
 package app.agixis.com.protoTypeForClient.ws;
 
-public class FormSignUpDto {
-    private String email;
+public class FormSignInDto {
+    private String name;
     private String  password ;
 
-    public FormSignUpDto(String email, String password) {
-        this.email = email;
+    public FormSignInDto(String email, String password) {
+        this.name = email;
         this.password = password;
     }
 
-    public FormSignUpDto() {
+    public FormSignInDto() {
     }
 
-    public String getEmail() {
-        return email;
+    public String getName() {
+        return name;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPassword() {

@@ -2,10 +2,12 @@ import {Injectable} from "@angular/core";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {JwtHelperService} from "@auth0/angular-jwt";
 import {Router} from "@angular/router";
+import {isNullOrUndefined} from "util";
 
 @Injectable()
 export class AuthenticationService {
   private host: string = "http://localhost:8080";
+  private name:string;
   private jwtToken: string;
   roles: Array<any>;
 
@@ -29,13 +31,15 @@ export class AuthenticationService {
     let jwtHelper = new JwtHelperService();
     let decodeToken = jwtHelper.decodeToken(this.jwtToken);
     console.log("admin ==> " + decodeToken.sub);
+    this.name = decodeToken.sub;
     this.roles = decodeToken.roles;
 
     console.log("Roless ==>" + this.roles.map(p=> p.authority).find(p=>{ return p == "ADMINISTRATOR" }));
   }
 
   isAdmin() {
-    return this.roles.map(p=> p.authority).find(p=>{ return p == "ADMINISTRATOR" }) ;  }
+    return this.roles.map(p=> p.authority).find(p=>{ return p == "ADMINISTRATOR" }) ;
+  }
 
   isUser() {
     return this.roles.map(p=> p.authority).find(p=>{ return p == "USER" });
@@ -62,7 +66,12 @@ export class AuthenticationService {
   }
 
   initParam() {
+    this.name = undefined;
     this.roles = undefined;
-    this.jwtToken = undefined
+    this.jwtToken = undefined;
+  }
+
+  register(user: any) {
+      return this.http.post(this.host+"/register",user);
   }
 }

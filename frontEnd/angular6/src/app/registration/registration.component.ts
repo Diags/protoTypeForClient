@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {AuthenticationService} from "../../services/authentication.service";
 
 @Component({
   selector: 'app-registration',
@@ -7,9 +8,22 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RegistrationComponent implements OnInit {
 
-  constructor() { }
-
+  user:any;
+  mode:number=0;
+  errorMessage:string;
+  constructor(private authService:AuthenticationService) { }
   ngOnInit() {
+  }
+  onRegister(user){
+    this.authService.register(user)
+      .subscribe(data=>{
+          this.user=data;
+          this.mode=1;
+        },
+        err=>{
+          this.errorMessage=err.error.message;
+          this.mode=0;
+        })
   }
 
 }

@@ -43,7 +43,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             System.out.println("******************************");
 
             System.out.println(user.getName());
-            System.out.println(SecurityContextHolder.getContext().getAuthentication());
+            System.out.println(user.getPassword());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

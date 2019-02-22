@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {AuthenticationService} from "../../services/authentication.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-task',
@@ -6,10 +8,18 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./task.component.css']
 })
 export class TaskComponent implements OnInit {
+  private tasks;
 
-  constructor() { }
+  constructor(private authService: AuthenticationService,private router :Router) {
+  }
 
   ngOnInit() {
+    this.authService.getTasks().subscribe(resp => {
+      this.tasks = resp;
+    },error1 => {
+      this.authService.logout();
+      this.router.navigateByUrl("/login");
+    })
   }
 
 }

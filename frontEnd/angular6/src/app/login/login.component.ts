@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
 import {AuthenticationService} from "../../services/authentication.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-login',
@@ -10,7 +10,7 @@ import {AuthenticationService} from "../../services/authentication.service";
 export class LoginComponent implements OnInit {
   mode: number = 0;
 
-  constructor(private http: HttpClient, private serviceAuth: AuthenticationService) {
+  constructor(private serviceAuth: AuthenticationService, private router: Router) {
   }
 
   ngOnInit() {
@@ -19,9 +19,13 @@ export class LoginComponent implements OnInit {
   onLogin(dataForm) {
     this.serviceAuth.login(dataForm).subscribe(resp => {
       let jwtToken = resp.headers.get('Authorization');
+      console.log(resp);
+      console.log(jwtToken);
       this.serviceAuth.saveToken(jwtToken);
+      this.router.navigateByUrl("/tasks");
     }, error => {
       this.mode = 1;
-    console.log(dataForm)});
+    });
   }
+
 }

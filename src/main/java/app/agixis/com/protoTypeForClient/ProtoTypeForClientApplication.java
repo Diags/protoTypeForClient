@@ -37,12 +37,12 @@ public class ProtoTypeForClientApplication implements CommandLineRunner {
         col.add(RoleEnum.USER);
         col.add(RoleEnum.ADMINISTRATOR);
         List<Customer> listCust = Arrays.asList(
-                new Customer("toto", "titit", "1234", "titi@gmail.com", Collections.singleton(RoleEnum.USER)),
-                new Customer("tata", "tata", "1234", "tata@gmail.com", Collections.singleton(RoleEnum.USER)),
-                new Customer("cucu", "cucu", "1234", "cucu@gmail.com", Collections.singleton(RoleEnum.USER)),
-                new Customer("admin", "admin", "1234", "admin@gmail.com", col));
+                new Customer("toto", "titit", bCryptPasswordEncoder().encode("1234"), "titi@gmail.com", Collections.singleton(RoleEnum.USER)),
+                new Customer("tata", "tata", bCryptPasswordEncoder().encode("1234"), "tata@gmail.com", Collections.singleton(RoleEnum.USER)),
+                new Customer("cucu", "cucu", bCryptPasswordEncoder().encode("1234"), "cucu@gmail.com", Collections.singleton(RoleEnum.USER)),
+                new Customer("admin", "admins", bCryptPasswordEncoder().encode("1234"), "admin@gmail.com", col));
         listCust.stream().forEach(p -> customerRepository.save(p));
-        customerRepository.findAll().stream().map(c -> c.getEmail()).forEach(System.out :: println);
+        customerRepository.findAll().stream().filter(p->p.getRoles().contains(RoleEnum.ADMINISTRATOR)).map(c -> c.getRoles()).forEach(System.out :: println);
         System.out.println("******************");
         Stream.of(new Task("task1"), new Task("task2"), new Task("task3"), new Task("task4")).forEach(t -> taskRepository.save(t));
         taskRepository.findAll().stream().map(t -> t.getMessage()).forEach(System.out :: println);

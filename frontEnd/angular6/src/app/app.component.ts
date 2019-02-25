@@ -10,7 +10,7 @@ import {Router} from "@angular/router";
 export class AppComponent implements OnInit {
   title = 'angular6';
 
-  constructor(private autService: AuthenticationService) {
+  constructor(private autService: AuthenticationService, private  router:Router) {
 
   }
 
@@ -33,4 +33,9 @@ export class AppComponent implements OnInit {
  this.autService.logout();
 
 }
+
+
+  postTask() {
+    this.router.navigateByUrl("/new-task");
+  }
 }

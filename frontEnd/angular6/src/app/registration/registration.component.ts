@@ -19,6 +19,7 @@ export class RegistrationComponent implements OnInit {
       .subscribe(data=>{
           this.user=data;
           this.mode=1;
+          console.log(data);
         },
         err=>{
           this.errorMessage=err.error.message;

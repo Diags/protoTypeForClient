@@ -4,44 +4,28 @@
   </div>
   <div class="panel panel-success" *ngIf="mode==1">
     <div class="panel-heading">
-      <strong>Registration Success</strong>
-    </div>
+      <strong>New task save Success </strong>
     <div class="panel-body">
       <ul class="list-group">
         <li class="list-group-item">
-          Your username : {{user.name}}
-        </li>
-        <li class="list-group-item">
-          Your role : {{user.roles[0]}}
+          Your task  : {{task.message}}
         </li>
       </ul>
+    </div>
     </div>
   </div>
   <div class="row col-md-6 col-md-offset-3" *ngIf="mode==0">
     <div class="panel panel-primary">
-      <div class="panel-heading">Registration</div>
+      <div class="panel-heading">New Task</div>
       <div class="panel-body">
-        <form #f="ngForm" (ngSubmit)="onRegister(f.value)">
+        <form #f="ngForm" (ngSubmit)="onPost(f.value)">
           <div class="form-group">
-            <label class="control-label">Usename</label>
-            <input type="text" name="name" ngModel class="form-control"/>
+            <label class="control-label">Task name</label>
+            <textarea rows="4" cols="50" name="message"  ngModel class="form-control">
+            Enter your task
+            </textarea>
           </div>
-          <div class="form-group">
-            <label class="control-label">Password</label>
-            <input type="password" name="password" ngModel
-                   class="form-control"/>
-          </div>
-          <div class="form-group">
-            <label class="control-label">Confirm Password</label>
-            <input type="password" name="confirmPassword" ngModel=""
-                   class="form-control"/>
-          </div>
-          <div class="form-group">
-            <label class="control-label">Email</label>
-            <input type="email" name="email" ngModel=""
-                   class="form-control"/>
-          </div>
-          <button type="submit" class="btn btn-danger">Register</button>
+          <button type="submit" class="btn btn-danger" [disabled]="!f.valid">Save</button>
         </form>
       </div>
     </div>

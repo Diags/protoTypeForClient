@@ -30,7 +30,6 @@ export class AuthenticationService {
   parsJWT() {
     let jwtHelper = new JwtHelperService();
     let decodeToken = jwtHelper.decodeToken(this.jwtToken);
-    console.log("admin ==> " + decodeToken.sub);
     this.name = decodeToken.sub;
     this.roles = decodeToken.roles;
 

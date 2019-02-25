@@ -8,15 +8,29 @@ import {Router} from "@angular/router";
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
+
   title = 'angular6';
 
-  constructor(private autService: AuthenticationService, private  router:Router) {
+  listTaskFilter: any = [];
+  listTask;
+  private _listFilter: string;
+  get listFilter(): string {
+    return this._listFilter;
+  }
 
+  set listFilter(value: string) {
+    this._listFilter = value;
+    this.listTaskFilter = this.listFilter ? this.perFormFilter(this.listFilter) : this.listTask;
+  }
+
+  constructor(private autService: AuthenticationService, private  router: Router) {
+    this.listTask = this.autService.getTasks();
+    this.listTaskFilter = this.listTask;
   }
 
   ngOnInit(): void {
     this.autService.logout();
-  }
+     }
 
   isAdmin() {
     return this.autService.isAdmin();
@@ -29,13 +43,21 @@ export class AppComponent implements OnInit {
   isAuthentificated() {
     return this.autService.isAuthentificated();
   }
-  logOut(){
- this.autService.logout();
 
-}
+  logOut() {
+    this.autService.logout();
+
+  }
 
 
   postTask() {
     this.router.navigateByUrl("/new-task");
+  }
+
+  private perFormFilter(filterby: string) {
+    filterby = filterby.toLocaleLowerCase();
+    return this.listTask.filter(task => {
+      task.message.toLocaleLowerCase().indexOf(filterby);
+    });
   }
 }

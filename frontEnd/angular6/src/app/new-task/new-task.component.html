@@ -1,6 +1,7 @@
 <div class="container">
-  <div class="alert alert-danger" *ngIf="mode==0 && errorMessage">
-    <strong>{{errorMessage}}</strong>
+  <div class="alert alert-danger" *ngIf="mode== 0 && errorMessage">
+   <!--{{errorMessage}}-->
+    <strong>  the text area must not be empty to send</strong>
   </div>
   <div class="panel panel-success" *ngIf="mode==1">
     <div class="panel-heading">
@@ -9,6 +10,9 @@
       <ul class="list-group">
         <li class="list-group-item">
           Your task  : {{task.message}}
+        </li>
+        <li class="list-group-item">
+         <button class="btn btn-outline-secondary" (click)="toTask()" style="width:80px;"><i class="fa fa-chevron-left"></i>Tasks </button>
         </li>
       </ul>
     </div>

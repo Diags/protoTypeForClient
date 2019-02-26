@@ -2,16 +2,16 @@ import {Injectable} from "@angular/core";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {JwtHelperService} from "@auth0/angular-jwt";
 import {Router} from "@angular/router";
-import {isNullOrUndefined} from "util";
 
 @Injectable()
 export class AuthenticationService {
   private host: string = "http://localhost:8080";
-  private name:string;
+  private name: string;
   private jwtToken: string;
   roles: Array<any>;
+  filter: string;
 
-  constructor(private http: HttpClient , private router: Router) {
+  constructor(private http: HttpClient, private router: Router) {
 
   }
 
@@ -33,15 +33,21 @@ export class AuthenticationService {
     this.name = decodeToken.sub;
     this.roles = decodeToken.roles;
 
-    console.log("Roless ==>" + this.roles.map(p=> p.authority).find(p=>{ return p == "ADMINISTRATOR" }));
+    console.log("Roless ==>" + this.roles.map(p => p.authority).find(p => {
+      return p == "ADMINISTRATOR"
+    }));
   }
 
   isAdmin() {
-    return this.roles.map(p=> p.authority).find(p=>{ return p == "ADMINISTRATOR" }) ;
+    return this.roles.map(p => p.authority).find(p => {
+      return p == "ADMINISTRATOR"
+    });
   }
 
   isUser() {
-    return this.roles.map(p=> p.authority).find(p=>{ return p == "USER" });
+    return this.roles.map(p => p.authority).find(p => {
+      return p == "USER"
+    });
   }
 
   loadToken() {
@@ -71,10 +77,24 @@ export class AuthenticationService {
   }
 
   register(user: any) {
-      return this.http.post(this.host+"/register",user);
+    return this.http.post(this.host + "/register", user);
   }
-  postTask(task){
-     console.log(task);
-    return this.http.post(this.host+"/savetasks",task,{headers: new HttpHeaders({'authorization': this.jwtToken})});
+
+  postTask(task) {
+    console.log(task);
+    return this.http.post(this.host + "/savetasks", task, {headers: new HttpHeaders({'authorization': this.jwtToken})});
+  }
+
+  getTaskById(id: any) {
+    return this.http.post(this.host + "/tasks/" + id, {headers: new HttpHeaders({'authorization': this.jwtToken})});
+  }
+
+  onFilter(val) {
+    this.filter = val;
+    console.log("service", val);
+  }
+  getFilter(){
+    console.log("caco", this.filter);
+    return this.filter;
   }
 }

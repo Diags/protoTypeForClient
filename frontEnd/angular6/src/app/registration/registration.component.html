@@ -15,7 +15,7 @@
           Your role : {{user.roles[0]}}
         </li>
         <li class="list-group-item">
-          <a routerLink="/tasks"> click to enter </a>
+          <a routerLink="/tasks" [class.activated]="currentUrl=='/tasks'"> click to enter </a>
         </li>
       </ul>
     </div>
@@ -27,22 +27,22 @@
         <form #f="ngForm" (ngSubmit)="onRegister(f.value)">
           <div class="form-group">
             <label class="control-label">Usename</label>
-            <input type="text" name="name" ngModel class="form-control"/>
+            <input type="text" name="name" ngModel class="form-control" required/>
           </div>
           <div class="form-group">
             <label class="control-label">Password</label>
             <input type="password" name="password" ngModel
-                   class="form-control"/>
+                   class="form-control" required/>
           </div>
           <div class="form-group">
             <label class="control-label">Confirm Password</label>
             <input type="password" name="confirmPassword" ngModel=""
-                   class="form-control"/>
+                   class="form-control" required/>
           </div>
           <div class="form-group">
             <label class="control-label">Email</label>
             <input type="email" name="email" ngModel=""
-                   class="form-control"/>
+                   class="form-control" placeholder="dupon@example.com" required=""/>
           </div>
           <button type="submit" class="btn btn-danger" [disabled]="!f.valid"> Register</button>
         </form>

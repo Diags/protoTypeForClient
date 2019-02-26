@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthenticationService} from "../../services/authentication.service";
-import {Router} from "@angular/router";
+import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
 
 @Component({
   selector: 'app-task',
@@ -9,17 +9,42 @@ import {Router} from "@angular/router";
 })
 export class TaskComponent implements OnInit {
   private tasks;
+  listTaskFilter: any = [];
+  listTask;
+  private _listFilter: string;
+  private currentUrl: string;
+  get listFilter(): string {
+     return  this._listFilter;
+  }
 
-  constructor(private authService: AuthenticationService,private router :Router) {
+  // set listFilter(value: string) {
+  //   value = this.authService.getFilter();
+  //   this._listFilter =  value;
+  //   this.listTaskFilter = this._listFilter ? this.perFormFilter(this.listFilter) : this.listTask;
+  // }
+
+  constructor(private authService: AuthenticationService, private router: Router) {
+    this.router.events.subscribe((_:NavigationEnd) => this.currentUrl = _.url);
+    this.listTaskFilter = this._listFilter ? this.perFormFilter(this.listFilter) : this.listTask;
   }
 
   ngOnInit() {
+    this._listFilter =  this.authService.getFilter();
     this.authService.getTasks().subscribe(resp => {
       this.tasks = resp;
-    },error1 => {
+      this.listTask = this.tasks;
+      this.listTaskFilter = this.listTask;
+    }, error1 => {
       this.authService.logout();
       this.router.navigateByUrl("/login");
     })
   }
 
+  private perFormFilter(filterby: string) {
+    console.log(filterby ,  "task");
+    filterby = filterby.toLocaleLowerCase();
+    return this.listTask.filter(task => {
+      task.message.toLocaleLowerCase().indexOf(filterby);
+    });
+  }
 }

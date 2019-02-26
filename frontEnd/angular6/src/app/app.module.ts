@@ -10,13 +10,17 @@ import {Route, RouterModule, Routes} from "@angular/router";
 import {FormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import {AuthenticationService} from "../services/authentication.service";
+import { HeaderComponent } from './header/header.component';
+import { TaskDetailComponent } from './task-detail/task-detail.component';
+import {TaskDetailGuard} from "./task-detail.guard";
 
 const appRoute:Routes = [
   {path:"login", component:LoginComponent},
   {path:"tasks",component:TaskComponent},
   {path:"new-task", component:NewTaskComponent},
   {path:"register",component:RegistrationComponent},
-  {path:"",redirectTo:"/login",pathMatch:"full"}
+  {path:"task-details/:id", canActivate: [TaskDetailGuard], component: TaskDetailComponent},
+  {path:"", redirectTo:"/tasks",pathMatch:"full"}
   ]
 @NgModule({
   declarations: [
@@ -24,7 +28,9 @@ const appRoute:Routes = [
     LoginComponent,
     TaskComponent,
     NewTaskComponent,
-    RegistrationComponent
+    RegistrationComponent,
+    HeaderComponent,
+    TaskDetailComponent
   ],
   imports: [
     BrowserModule, RouterModule.forRoot(appRoute), FormsModule, HttpClientModule

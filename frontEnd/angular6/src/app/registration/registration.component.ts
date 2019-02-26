@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthenticationService} from "../../services/authentication.service";
+import {NavigationEnd, Router} from "@angular/router";
 
 @Component({
   selector: 'app-registration',
@@ -11,7 +12,10 @@ export class RegistrationComponent implements OnInit {
   user:any;
   mode:number=0;
   errorMessage:string;
-  constructor(private authService:AuthenticationService) { }
+  private currentUrl: string;
+  constructor(private authService:AuthenticationService,private router:Router) {
+    this.router.events.subscribe((_:NavigationEnd) => this.currentUrl = _.url)
+  }
   ngOnInit() {
   }
   onRegister(user){

@@ -1,9 +1,15 @@
 <div class="container">
-  <table class="table table-striped"></table>
+  <table class="table table-striped">
+  <thead>
   <tr>
-    <th>Task Name</th>
+    <th> ID </th> <th> Task Name </th>
   </tr>
+  </thead>
+  <tbody>
   <tr *ngFor="let task of tasks">
-    <td>{{task.message}}</td>
+    <td>{{task.id}}</td>
+    <td> <a [routerLink]="['/task-details/',task.id]">{{task.message}}</a></td>
   </tr>
+  </tbody>
+  </table>
 </div>

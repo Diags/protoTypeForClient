@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthenticationService} from "../../services/authentication.service";
-import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
+import {NavigationEnd, Router} from "@angular/router";
 
 @Component({
   selector: 'app-task',
@@ -8,13 +8,15 @@ import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
   styleUrls: ['./task.component.css']
 })
 export class TaskComponent implements OnInit {
-  private tasks;
+  tasks;
   listTaskFilter: any = [];
   listTask;
   private _listFilter: string;
   private currentUrl: string;
+  edit: boolean = false;
+
   get listFilter(): string {
-     return  this._listFilter;
+    return this._listFilter;
   }
 
   // set listFilter(value: string) {
@@ -24,12 +26,16 @@ export class TaskComponent implements OnInit {
   // }
 
   constructor(private authService: AuthenticationService, private router: Router) {
-    this.router.events.subscribe((_:NavigationEnd) => this.currentUrl = _.url);
+    this.router.events.subscribe((_: NavigationEnd) => this.currentUrl = _.url);
     this.listTaskFilter = this._listFilter ? this.perFormFilter(this.listFilter) : this.listTask;
   }
 
   ngOnInit() {
-    this._listFilter =  this.authService.getFilter();
+    this._listFilter = this.authService.getFilter();
+    this.getTasks();
+  }
+
+  getTasks() {
     this.authService.getTasks().subscribe(resp => {
       this.tasks = resp;
       this.listTask = this.tasks;
@@ -41,10 +47,30 @@ export class TaskComponent implements OnInit {
   }
 
   private perFormFilter(filterby: string) {
-    console.log(filterby ,  "task");
+    console.log(filterby, "task");
     filterby = filterby.toLocaleLowerCase();
     return this.listTask.filter(task => {
       task.message.toLocaleLowerCase().indexOf(filterby);
     });
+  }
+
+  onDeleteTask(id) {
+    let c = confirm("Etes vous sure de supprimer !!")
+    if (!c) return;
+    console.log(id);
+    this.authService.deleteTask(id).subscribe(resp => {
+      this.getTasks();
+    }, error1 => {
+      console.log(error1);
+    })
+  }
+
+  onEditTask(id) {
+    this.edit = true;
+    this.authService.editTask(id).subscribe(resp => {
+      console.log(resp);
+    }, error => {
+      console.log(error);
+    })
   }
 }

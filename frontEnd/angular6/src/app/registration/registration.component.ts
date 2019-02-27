@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthenticationService} from "../../services/authentication.service";
 import {NavigationEnd, Router} from "@angular/router";
 
@@ -9,25 +9,28 @@ import {NavigationEnd, Router} from "@angular/router";
 })
 export class RegistrationComponent implements OnInit {
 
-  user:any;
-  mode:number=0;
-  errorMessage:string;
+  user: any;
+  mode: number = 0;
+  errorMessage: string;
   private currentUrl: string;
-  constructor(private authService:AuthenticationService,private router:Router) {
-    this.router.events.subscribe((_:NavigationEnd) => this.currentUrl = _.url)
+
+  constructor(private authService: AuthenticationService, private router: Router) {
+    this.router.events.subscribe((_: NavigationEnd) => this.currentUrl = _.url)
   }
+
   ngOnInit() {
   }
-  onRegister(user){
+
+  onRegister(user) {
     this.authService.register(user)
-      .subscribe(data=>{
-          this.user=data;
-          this.mode=1;
+      .subscribe(data => {
+          this.user = data;
+          this.mode = 1;
           console.log(data);
         },
-        err=>{
-          this.errorMessage=err.error.message;
-          this.mode=0;
+        err => {
+          this.errorMessage = err.error.message;
+          this.mode = 0;
         })
   }
 

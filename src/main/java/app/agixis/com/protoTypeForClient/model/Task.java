@@ -20,7 +20,13 @@ public class Task {
 
     public Task() {
     }
+    public Long getId() {
+        return Id;
+    }
 
+    public void setId(Long id) {
+        Id = id;
+    }
     public String getMessage() {
         return message;
     }

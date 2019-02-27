@@ -43,6 +43,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers( "/login/**","/signin/**", "/register/**","/h2/**/**")
                 .permitAll()
                 .antMatchers(HttpMethod.POST, "/savetasks/**").hasAuthority(String.valueOf(RoleEnum.ADMINISTRATOR))
+                .antMatchers(HttpMethod.DELETE, "/deletetask/**").hasAuthority(String.valueOf(RoleEnum.ADMINISTRATOR))
+                .antMatchers(HttpMethod.PUT, "/updatetask/**").hasAuthority(String.valueOf(RoleEnum.ADMINISTRATOR))
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))

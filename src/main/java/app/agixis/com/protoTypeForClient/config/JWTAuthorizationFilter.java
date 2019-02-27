@@ -20,11 +20,9 @@ import java.util.Map;
 public class JWTAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        response.addHeader("Access-Control-Allow-Origin",
-                "*");
-
+        response.addHeader("Access-Control-Allow-Origin", "*");
         response.addHeader("Access-Control-Allow-Headers", "Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers,Authorization");
-
+        response.addHeader("Access-control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE");
         response.addHeader("Access-Control-Expose-Headers", "Access-Control-Allow-Origin, Access-Control-Allow-Credentials, Authorization");
         if (request.getMethod().equals("OPTIONS")) {
             response.setStatus(HttpServletResponse.SC_OK);
@@ -42,6 +40,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
                     filterChain.doFilter(request, response); // If not valid, go to the next filter.
                     return;
                 }
+
                 Claims claims = Jwts.parser()
                         .setSigningKey(SecurityConstants.SECRET)
                         .parseClaimsJws(jwtToken.replace(SecurityConstants.TOKEN_PREFIX, ""))

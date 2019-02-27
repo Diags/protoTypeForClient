@@ -15,7 +15,7 @@ export class TaskDetailGuard implements CanActivate {
     let id = +next.url[1].path;
     if(isNaN(id) || id <1){
       this.router.navigateByUrl("/tasks");
-      alert("nooooo ");
+      alert("nop !! this is id is not ok ");
       return false;
     }
     return true;

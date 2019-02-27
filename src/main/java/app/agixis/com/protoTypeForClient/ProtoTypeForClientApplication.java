@@ -10,6 +10,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.*;
@@ -21,6 +22,8 @@ public class ProtoTypeForClientApplication implements CommandLineRunner {
     private TaskRepository taskRepository;
     @Autowired
     private CustomerRepository customerRepository;
+    @Autowired
+    private  RepositoryRestConfiguration repositoryRestConfiguration;
 
     public static void main(String[] args) {
         SpringApplication.run(ProtoTypeForClientApplication.class, args);
@@ -33,6 +36,7 @@ public class ProtoTypeForClientApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        repositoryRestConfiguration.exposeIdsFor(Task.class);
         Set<RoleEnum> col = new HashSet<>();
         col.add(RoleEnum.USER);
         col.add(RoleEnum.ADMINISTRATOR);

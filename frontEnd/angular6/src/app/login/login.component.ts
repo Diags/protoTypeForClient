@@ -9,6 +9,7 @@ import {Router} from "@angular/router";
 })
 export class LoginComponent implements OnInit {
   mode: number = 0;
+  loading = false;
 
   constructor(private serviceAuth: AuthenticationService, private router: Router) {
   }
@@ -17,6 +18,7 @@ export class LoginComponent implements OnInit {
   }
 
   onLogin(dataForm) {
+    this.loading = true;
     this.serviceAuth.login(dataForm).subscribe(resp => {
       let jwtToken = resp.headers.get('Authorization');
       console.log(resp);

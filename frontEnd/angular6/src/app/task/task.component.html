@@ -1,15 +1,32 @@
-<div class="container">
-  <table class="table table-striped">
-  <thead>
-  <tr>
-    <th> ID </th> <th> Task Name </th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let task of tasks">
-    <td>{{task.id}}</td>
-    <td> <a [routerLink]="['/task-details/',task.id]">{{task.message}}</a></td>
-  </tr>
-  </tbody>
-  </table>
+<div class="container" *ngIf="tasks">
+  <div class="panel panel-default">
+    <div class="panel-heading">Tasks</div>
+    <div class="panel-body">
+
+      <table class="table table-striped ">
+        <thead>
+        <tr>
+          <th> ID</th>
+          <th> Task Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let task of tasks">
+          <td>{{task.id}}</td>
+          <td  [routerLink]="['/task-details/',task.id]"><input  [disabled]="!edit" value="{{task.message}}" name="{{task.message}}" /></td>
+          <td>
+            <button class="btn btn-danger" (click)="onDeleteTask(task.id)">
+              <span class="glyphicon glyphicon-remove"></span>
+            </button>
+          </td>
+          <td>
+            <button class="btn btn-danger" (click)="onEditTask(task.id)">
+              <span class="glyphicon glyphicon-edit"></span>
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>

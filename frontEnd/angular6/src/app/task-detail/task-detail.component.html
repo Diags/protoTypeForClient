@@ -1,9 +1,14 @@
-<p>
-  task-detail works!
-</p>
-<div class="container">
-  <button class="btn btn-outline-secondary" (click)="toTask()" style="width:110px; color: #2909d5;">
-    <span class="glyphicon glyphicon-circle-arrow-left">Task</span>
-  </button>
-
+<div class="container" *ngIf="task">
+  <div class="panel page-information">
+    <div class="panel-heading">Task</div>
+    <div class="panel-body">
+      <ul>
+        <li>{{task.id}}</li>
+        <li>{{task.message}}</li>
+      </ul>
+      <button class="btn btn-outline-secondary" (click)="toTask()" style="width:110px; color: #2909d5;">
+        <span class="glyphicon glyphicon-circle-arrow-left">Task</span>
+      </button>
+    </div>
+  </div>
 </div>

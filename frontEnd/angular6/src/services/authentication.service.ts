@@ -85,8 +85,8 @@ export class AuthenticationService {
     return this.http.post(this.host + "/savetasks", task, {headers: new HttpHeaders({'authorization': this.jwtToken})});
   }
 
-  getTaskById(id: any) {
-    return this.http.post(this.host + "/tasks/" + id, {headers: new HttpHeaders({'authorization': this.jwtToken})});
+  getTaskById(id) {
+    return this.http.get(this.host + "/tasks/" + id, {headers: new HttpHeaders({'authorization': this.jwtToken})});
   }
 
   onFilter(val) {
@@ -96,5 +96,13 @@ export class AuthenticationService {
   getFilter(){
     console.log("caco", this.filter);
     return this.filter;
+  }
+
+  deleteTask(id: any) {
+    return this.http.delete(this.host+"/deletetask/"+id, {headers: new HttpHeaders({'authorization':'Bearer '+ this.jwtToken})});
+  }
+
+  editTask(id: any) {
+    return this.http.put(this.host+"/updatetask/"+id, {headers: new HttpHeaders({'authorization':'Bearer '+ this.jwtToken})});
   }
 }

@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {NgModule, NO_ERRORS_SCHEMA} from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -13,6 +13,8 @@ import {AuthenticationService} from "../services/authentication.service";
 import { HeaderComponent } from './header/header.component';
 import { TaskDetailComponent } from './task-detail/task-detail.component';
 import {TaskDetailGuard} from "./task-detail.guard";
+import {MDBBootstrapModule} from "angular-bootstrap-md";
+import { ModalComponent } from './modal/modal.component';
 
 const appRoute:Routes = [
   {path:"login", component:LoginComponent},
@@ -20,6 +22,7 @@ const appRoute:Routes = [
   {path:"new-task", component:NewTaskComponent},
   {path:"register",component:RegistrationComponent},
   {path:"task-details/:id", canActivate: [TaskDetailGuard], component: TaskDetailComponent},
+  {path:"modal-edit", canActivate: [TaskDetailGuard], component: ModalComponent},
   {path:"", redirectTo:"/tasks",pathMatch:"full"}
   ]
 @NgModule({
@@ -30,11 +33,13 @@ const appRoute:Routes = [
     NewTaskComponent,
     RegistrationComponent,
     HeaderComponent,
-    TaskDetailComponent
+    TaskDetailComponent,
+    ModalComponent
   ],
   imports: [
-    BrowserModule, RouterModule.forRoot(appRoute), FormsModule, HttpClientModule
+    BrowserModule, RouterModule.forRoot(appRoute), FormsModule, HttpClientModule, MDBBootstrapModule.forRoot()
   ],
+  schemas: [ NO_ERRORS_SCHEMA ],
   providers: [AuthenticationService],
   bootstrap: [AppComponent]
 })

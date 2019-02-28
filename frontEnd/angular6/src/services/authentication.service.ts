@@ -93,6 +93,7 @@ export class AuthenticationService {
     this.filter = val;
     console.log("service", val);
   }
+
   getFilter(){
     console.log("caco", this.filter);
     return this.filter;
@@ -102,7 +103,8 @@ export class AuthenticationService {
     return this.http.delete(this.host+"/deletetask/"+id, {headers: new HttpHeaders({'authorization':'Bearer '+ this.jwtToken})});
   }
 
-  editTask(id: any) {
-    return this.http.put(this.host+"/updatetask/"+id, {headers: new HttpHeaders({'authorization':'Bearer '+ this.jwtToken})});
+  editTask(task) {
+    console.log("service task",task);
+    return this.http.post(this.host+"/updatetask" , task, {headers: new HttpHeaders({'authorization':this.jwtToken})});
   }
 }

@@ -35,11 +35,11 @@ public class TaskController {
        taskRepository.deleteById(id);
     }
 
-    @PutMapping(value = "/updatetask", produces = APPLICATION_JSON_VALUE)
+    @PostMapping("/updatetask")
     public ResponseEntity<Task>  updatetask(@RequestBody Task task){
         if(task == null) throw new TaskNotFoundException(task);
         Task taskFind = taskRepository.findById(task.getId()).orElseThrow(()->  new TaskNotFoundException(task.getId()));
-       taskFind.setMessage(task.getMessage());
+        taskFind.setMessage(task.getMessage());
         taskRepository.save(taskFind);
         return new ResponseEntity<>( taskRepository.findById(taskFind.getId()).orElseThrow(()-> new TaskNotFoundException(taskFind.getId())), HttpStatus.OK);
     }

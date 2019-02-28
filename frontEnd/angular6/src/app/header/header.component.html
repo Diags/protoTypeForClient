@@ -1,15 +1,19 @@
-<nav class="navbar navbar-inverse">
+<nav class="navbar  navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a class="navbar-brand">WebSiteName</a>
+      <a class="navbar-brand white-text">WebSiteName</a>
     </div>
-    <ul *ngIf="isAuthentificated()" class="nav navbar-nav">
-      <li *ngIf="isUser()"><a routerLink="/tasks" [class.activated]="currentUrl == '/tasks'">Tasks</a></li>
-      <li *ngIf="isAdmin()" class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin
+    <ul *ngIf="isAuthentificated()" class= "navbar-nav mr-auto">
+      <li class="nav-item" *ngIf="isUser()">
+        <a class=" waves-light" routerLink="/tasks" [class.activated]="currentUrl == '/tasks'">Tasks</a>
+      </li>
+      <li   *ngIf="isAdmin()"  class="nav-item dropdown mydropdow" dropdown>
+        <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>Admin
           <span class="caret"></span></a>
-        <ul class="dropdown-menu">
-          <li><a (click)="postTask()" [class.activated]="currentUrl == '/new-task'">New task</a></li>
+        <ul  *dropdownMenu class="dropdown-menu dropdown dropdown-primary" role="menu">
+          <li class="nav-item">
+            <a class="dropdown-item waves-light" mdbWavesEffect (click)="postTask()" [class.activated]="currentUrl == '/new-task'">New task</a>
+          </li>
         </ul>
       </li>
     </ul>

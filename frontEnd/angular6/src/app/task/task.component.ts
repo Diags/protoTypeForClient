@@ -14,7 +14,7 @@ export class TaskComponent implements OnInit {
   private _listFilter: string;
   private currentUrl: string;
   edit: boolean = false;
-
+  tasksCurrent;
   get listFilter(): string {
     return this._listFilter;
   }
@@ -65,9 +65,12 @@ export class TaskComponent implements OnInit {
     })
   }
 
-  onEditTask(id) {
+  onEditTask(task) {
     this.edit = true;
-    this.authService.editTask(id).subscribe(resp => {
+    console.log(task);
+    this.authService.editTask(task).subscribe(resp => {
+      this.tasksCurrent = resp;
+      this.getTasks();
       console.log(resp);
     }, error => {
       console.log(error);

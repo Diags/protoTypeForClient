@@ -1,13 +1,13 @@
 <div class="container" *ngIf="task">
-  <div class="panel page-information">
-    <div class="panel-heading">Task</div>
+  <div class="panel panel-default">
+    <div class="panel-heading">Task info</div>
     <div class="panel-body">
-      <ul>
-        <li>{{task.id}}</li>
-        <li>{{task.message}}</li>
+      <ul class="list-group list-group-flush">
+        <li  class="list-group-item list-group-item-primary">ID:  <span class="fa fa-space">{{task.id}}</span> </li>
+        <li  class="list-group-item list-group-item-light">message :  <span class="fa fa-space">{{task.message}}</span></li>
       </ul>
-      <button class="btn btn-outline-secondary" (click)="toTask()" style="width:110px; color: #2909d5;">
-        <span class="glyphicon glyphicon-circle-arrow-left">Task</span>
+      <button type="button" class="btn btn-success"(click)="toTask()" style="width:110px;">
+        <i class="fa fa-hand-o-left fa-space fa-2x"></i>  <i class="fa fa-space"></i><span>Task</span>
       </button>
     </div>
   </div>

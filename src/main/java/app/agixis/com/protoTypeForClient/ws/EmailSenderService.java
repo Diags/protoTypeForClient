@@ -3,69 +3,40 @@ package app.agixis.com.protoTypeForClient.ws;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import javax.validation.Payload;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Pattern;
-import java.lang.annotation.Annotation;
+import java.util.Properties;
+
 
 @Service
-public class EmailSenderService implements Email {
+public class EmailSenderService   {
+    private JavaMailSenderImpl mailSender;
 
-    private JavaMailSender javaMailSender;
-//
-//    @Autowired
-//    public EmailSenderService(JavaMailSender javaMailSender) {
-//        this.javaMailSender = javaMailSender;
-//    }
+    @Autowired
+    public EmailSenderService(JavaMailSenderImpl mailSender) {
+        this.mailSender = mailSender;
+    }
 
     @Async
     public void sendEmail(SimpleMailMessage email) {
-        javaMailSender.send(email);
-    }
+        mailSender.setHost("smtp.gmail.com");
+        mailSender.setPort(587);
 
-    @Override
-    public String message() {
-        return null;
+        mailSender.setJavaMailProperties(getMailProperties());
+        mailSender.setUsername("diaguilybounba@@gmail.com");
+        mailSender.setPassword("BallaSylla%2016");
+        mailSender.send(email);
     }
-
-    @Override
-    public Class<?>[] groups() {
-        return new Class[0];
-    }
-
-    @Override
-    public Class<? extends Payload>[] payload() {
-        return new Class[0];
-    }
-
-    /**
-     * @return an additional regular expression the annotated element must match. The default
-     * is any string ('.*')
-     */
-    @Override
-    public String regexp() {
-        return null;
-    }
-
-    /**
-     * @return used in combination with {@link #regexp()} in order to specify a regular
-     * expression option
-     */
-    @Override
-    public Pattern.Flag[] flags() {
-        return new Pattern.Flag[0];
-    }
-
-    /**
-     * Returns the annotation type of this annotation.
-     *
-     * @return the annotation type of this annotation
-     */
-    @Override
-    public Class<? extends Annotation> annotationType() {
-        return null;
+    public Properties getMailProperties() {
+        Properties properties = new Properties();
+        properties.setProperty("mail.transport.protocol", "smtp");
+        properties.setProperty("mail.smtp.auth", "true");
+        properties.setProperty("mail.smtp.starttls.enable", "true");
+        properties.setProperty("mail.debug", "true");
+        properties.setProperty("mail.smtp.ssl.enable","true");
+        properties.setProperty("mail.test-connection","true");
+        return properties;
     }
 }

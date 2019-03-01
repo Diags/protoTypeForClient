@@ -79,7 +79,9 @@ export class AuthenticationService {
   register(user: any) {
     return this.http.post(this.host + "/register", user);
   }
-
+  sendEmail(user){
+   return  this.http.post(this.host + "/sendemail", user,{ headers: new HttpHeaders({'authorization': this.jwtToken})});
+  }
   postTask(task) {
     console.log(task);
     return this.http.post(this.host + "/savetasks", task, {headers: new HttpHeaders({'authorization': this.jwtToken})});

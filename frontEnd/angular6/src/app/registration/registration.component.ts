@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthenticationService} from "../../services/authentication.service";
 import {NavigationEnd, Router} from "@angular/router";
+import {error} from "util";
 
 @Component({
   selector: 'app-registration',
@@ -26,7 +27,13 @@ export class RegistrationComponent implements OnInit {
       .subscribe(data => {
           this.user = data;
           this.mode = 1;
-          console.log(data);
+          this.authService.sendEmail(user).subscribe(data => {
+            console.log(data);
+          },
+            err => {
+              this.errorMessage = err;
+              this.mode = 0;
+            })
         },
         err => {
           this.errorMessage = err.error.message;

@@ -22,7 +22,7 @@ public class Customer implements Serializable {
     @Column(unique = true, nullable = false)
     private String email;
     @ElementCollection(targetClass = RoleEnum.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_genres", joinColumns = @JoinColumn(name = "customer_id"))
+    @CollectionTable(name = "customer_genres", joinColumns = @JoinColumn(name = "customer_id"))
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     private Set<RoleEnum> roles;

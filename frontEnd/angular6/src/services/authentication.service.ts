@@ -77,10 +77,7 @@ export class AuthenticationService {
   }
 
   register(user: any) {
-    return this.http.post(this.host + "/register", user);
-  }
-  sendEmail(user){
-   return  this.http.post(this.host + "/sendemail", user,{ headers: new HttpHeaders({'authorization': this.jwtToken})});
+    return this.http.post(this.host + "/register", user,{observe: 'response'});
   }
   postTask(task) {
     console.log(task);
@@ -96,17 +93,21 @@ export class AuthenticationService {
     console.log("service", val);
   }
 
-  getFilter(){
+  getFilter() {
     console.log("caco", this.filter);
     return this.filter;
   }
 
   deleteTask(id: any) {
-    return this.http.delete(this.host+"/deletetask/"+id, {headers: new HttpHeaders({'authorization':'Bearer '+ this.jwtToken})});
+    return this.http.delete(this.host + "/deletetask/" + id, {headers: new HttpHeaders({'authorization': 'Bearer ' + this.jwtToken})});
+  }
+
+  RegistrationConfirm() {
+    return this.http.get(this.host + "/registrationConfirm?token"+this.jwtToken , {headers: new HttpHeaders({'authorization': this.jwtToken})});
   }
 
   editTask(task) {
-    console.log("service task",task);
-    return this.http.post(this.host+"/updatetask" , task, {headers: new HttpHeaders({'authorization':this.jwtToken})});
+    console.log("service task", task);
+    return this.http.post(this.host + "/updatetask", task, {headers: new HttpHeaders({'authorization': this.jwtToken})});
   }
 }

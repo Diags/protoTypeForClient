@@ -25,9 +25,10 @@ export class RegistrationComponent implements OnInit {
   onRegister(user) {
     this.authService.register(user)
       .subscribe(data => {
+          console.log("registration"+data);
           this.user = data;
           this.mode = 1;
-          this.authService.sendEmail(user).subscribe(data => {
+          this.authService.RegistrationConfirm().subscribe(data => {
             console.log(data);
           },
             err => {

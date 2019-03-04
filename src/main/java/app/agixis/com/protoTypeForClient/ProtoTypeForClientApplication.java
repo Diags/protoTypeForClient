@@ -3,8 +3,11 @@ package app.agixis.com.protoTypeForClient;
 import app.agixis.com.protoTypeForClient.model.Customer;
 import app.agixis.com.protoTypeForClient.model.RoleEnum;
 import app.agixis.com.protoTypeForClient.model.Task;
+import app.agixis.com.protoTypeForClient.model.VerificationToken;
 import app.agixis.com.protoTypeForClient.repository.CustomerRepository;
 import app.agixis.com.protoTypeForClient.repository.TaskRepository;
+import app.agixis.com.protoTypeForClient.repository.VerificationTokenRepo;
+import app.agixis.com.protoTypeForClient.ws.EmailSenderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -24,7 +27,8 @@ public class ProtoTypeForClientApplication implements CommandLineRunner {
     private CustomerRepository customerRepository;
     @Autowired
     private  RepositoryRestConfiguration repositoryRestConfiguration;
-
+    @Autowired
+    private VerificationTokenRepo verificationTokenRepo;
     public static void main(String[] args) {
         SpringApplication.run(ProtoTypeForClientApplication.class, args);
     }
@@ -36,7 +40,7 @@ public class ProtoTypeForClientApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        repositoryRestConfiguration.exposeIdsFor(Task.class);
+        repositoryRestConfiguration.exposeIdsFor(Task.class, VerificationToken.class);
         Set<RoleEnum> col = new HashSet<>();
         col.add(RoleEnum.USER);
         col.add(RoleEnum.ADMINISTRATOR);
@@ -51,6 +55,15 @@ public class ProtoTypeForClientApplication implements CommandLineRunner {
         Stream.of(new Task("task1"), new Task("task2"), new Task("task3"), new Task("task4")).forEach(t -> taskRepository.save(t));
         taskRepository.findAll().stream().map(t -> t.getMessage()).forEach(System.out :: println);
 
+
+
+
+//        String from = "diaguilybouna@gmail.com";
+//        String to = "diaguilybouna@gmail.com";
+//        String subject = "JavaMailSender";
+//        String body = "Just-Testing!";
+//
+//        emailSenderService.sendMail(from, to, subject, body);
 
     }
 }

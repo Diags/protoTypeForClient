@@ -1,5 +1,6 @@
 package app.agixis.com.protoTypeForClient.ws;
 
+import app.agixis.com.protoTypeForClient.errorHandle.TaskNotFoundException;
 import app.agixis.com.protoTypeForClient.model.Task;
 import app.agixis.com.protoTypeForClient.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;

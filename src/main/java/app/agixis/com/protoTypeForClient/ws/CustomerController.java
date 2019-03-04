@@ -1,21 +1,24 @@
 package app.agixis.com.protoTypeForClient.ws;
 
+import app.agixis.com.protoTypeForClient.errorHandle.CustomerNotfoundException;
 import app.agixis.com.protoTypeForClient.model.Customer;
 import app.agixis.com.protoTypeForClient.model.RoleEnum;
+import app.agixis.com.protoTypeForClient.model.VerificationToken;
 import app.agixis.com.protoTypeForClient.repository.CustomerRepository;
+import app.agixis.com.protoTypeForClient.repository.VerificationTokenRepo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.RequestContext;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Context;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Locale;
 
 @RestController
 public class CustomerController {
@@ -24,8 +27,11 @@ public class CustomerController {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     @Autowired
-
+    private VerificationTokenRepo verificationTokenRepo;
+    @Autowired
     private EmailSenderService emailSenderService;
+    @Autowired
+    private VerificationTokenServiceImpl verificationTokenService;
 
     @PostMapping("/signin")
     public Customer signUp(@RequestBody FormSignInDto form) {
@@ -36,35 +42,13 @@ public class CustomerController {
         return user;
     }
 
-    @PostMapping("/sendemail")
-    public Customer sendEmail(@RequestBody FormRegisterDto form, @Context HttpServletRequest request) {
-        Customer user = customerRepository.findByNameOrEmail(form.getName(), form.getName());
-        if (user == null) {
-            throw new UsernameNotFoundException("this user doesnot existe please register" + form.getName());
-        }
-
-
-
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        String token = request.getHeader("postman-token");
-        String url = request.getScheme() + "//" + request.getServerName();
-        System.out.println(token);
-        mailMessage.setTo(form.getEmail());
-        mailMessage.setSubject("Complete Registration!");
-        mailMessage.setText("To confirm your account, please click here : "
-                + url + "/signin?" + token);
-        mailMessage.setFrom("diaguilybouna@gmail.com");
-
-        emailSenderService.sendEmail(mailMessage);
-
-        return user;
-    }
-
     @PostMapping("/register")
     public Customer register(@RequestBody FormRegisterDto form, @Context HttpServletRequest request) {
+        Logger logger = LoggerFactory.getLogger(this.getClass());
         Customer user = customerRepository.findByNameOrEmail(form.getEmail(), form.getEmail());
+        logger.info("Customer find", user);
         if (user != null) {
-            throw new UsernameNotFoundException("this user  exists  please register with  " + form.getEmail());
+            throw new UsernameNotFoundException("this user already  exists  please register with  " + form.getEmail());
         }
         if (!form.getPassword().equals(form.getConfirmPassword()))
             new Exception("password not be confirmed" + form.getConfirmPassword());
@@ -74,8 +58,34 @@ public class CustomerController {
         cost.setEmail(form.getEmail());
         cost.setPasseWord(bCryptPasswordEncoder.encode(form.getPassword()));
         cost.setRoles(new HashSet<>(Collections.singleton(RoleEnum.USER)));
+        String from = "diaguilybouna@gmail.com";
+        String to = "diaguilybouna@gmail.com";
+        String subject = "JavaMailSender";
+        String token = request.getHeader("postman-token");
+        String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+        System.out.println(token);
+        logger.info("Customer find", cost);
+        String body = "To confirm your account, please click here :" + " rn "
+                + url + "/signin?token=" + token;
         customerRepository.save(cost);
-
+        verificationTokenService.createVerificationToken(cost, token);
+        emailSenderService.sendMail(from, to, subject, body);
         return customerRepository.findByNameOrEmail(form.getEmail(), form.getEmail());
+    }
+
+    @GetMapping("/registrationConfirm")
+    public Customer confirmRegistration(@RequestParam("token") String token, @Context HttpServletRequest request) throws Exception {
+        String confirmToken = request.getHeader("postman-token");
+        String url = request.getScheme() + "//" + request.getServerName() + ":" + request.getServerPort();
+        System.out.println(token);
+        Locale locale = request.getLocale();
+        VerificationToken verificationToken = verificationTokenRepo.findByToken(token);
+        if (verificationToken == null) {
+            throw new Exception("This token is not available" + token);
+        }
+        Customer customer = verificationToken.getCustomer();
+        if (customer == null) throw new CustomerNotfoundException(customer);
+        return customer;
+
     }
 }

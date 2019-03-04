@@ -1,42 +1,36 @@
 package app.agixis.com.protoTypeForClient.ws;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-
-import java.util.Properties;
 
 
 @Service
-public class EmailSenderService   {
-    private JavaMailSenderImpl mailSender;
-
+public class EmailSenderService {
+    Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
-    public EmailSenderService(JavaMailSenderImpl mailSender) {
-        this.mailSender = mailSender;
+    private JavaMailSender javaMailSender;
+    @Value("${spring.mail.username:diaguilybouna@gmail.com}")
+    private String username;
+    @Value("${spring.mail.password:BallaSylla%2016}")
+    private String password;
+
+    public void sendMail(String from, String to, String subject, String body) {
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setFrom(from);
+        mail.setTo(to);
+        mail.setSubject(subject);
+        mail.setText(body);
+
+        logger.info("Sending...");
+
+        javaMailSender.send(mail);
+        logger.info("Done!");
     }
 
-    @Async
-    public void sendEmail(SimpleMailMessage email) {
-        mailSender.setHost("smtp.gmail.com");
-        mailSender.setPort(587);
 
-        mailSender.setJavaMailProperties(getMailProperties());
-        mailSender.setUsername("diaguilybounba@@gmail.com");
-        mailSender.setPassword("BallaSylla%2016");
-        mailSender.send(email);
-    }
-    public Properties getMailProperties() {
-        Properties properties = new Properties();
-        properties.setProperty("mail.transport.protocol", "smtp");
-        properties.setProperty("mail.smtp.auth", "true");
-        properties.setProperty("mail.smtp.starttls.enable", "true");
-        properties.setProperty("mail.debug", "true");
-        properties.setProperty("mail.smtp.ssl.enable","true");
-        properties.setProperty("mail.test-connection","true");
-        return properties;
-    }
 }

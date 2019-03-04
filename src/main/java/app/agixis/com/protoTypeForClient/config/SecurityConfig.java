@@ -40,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .exceptionHandling().authenticationEntryPoint((req, rsp, e) -> rsp.sendError(HttpServletResponse.SC_UNAUTHORIZED))
                 .and()
                 .authorizeRequests()
-                .antMatchers( "/login/**","/signin/**", "/register/**","/sendemail/**","/h2/**/**")
+                .antMatchers( "/login/**","/signin/**", "/register/**","/sendemail/**","/registrationConfirm/**","/h2/**/**")
                 .permitAll()
                 .antMatchers(HttpMethod.POST, "/sendemail/**","/updatetask/**","/savetasks/**").hasAnyAuthority(String.valueOf(RoleEnum.ADMINISTRATOR), String.valueOf(RoleEnum.USER ))
                 .antMatchers(HttpMethod.DELETE, "/deletetask/**").hasAnyAuthority(String.valueOf(RoleEnum.ADMINISTRATOR), String.valueOf(RoleEnum.USER ))

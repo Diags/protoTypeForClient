@@ -18,19 +18,19 @@ export class NewTaskComponent implements OnInit {
 
   ngOnInit() {
   }
-
-  onRegister(user) {
-    this.authService.register(user)
-      .subscribe(data => {
-          this.user = data;
-          console.log(data);
-          this.mode = 1;
-        },
-        err => {
-          this.errorMessage = err.error.message;
-          this.mode = 0;
-        })
-  }
+  //
+  // onRegister(user) {
+  //   this.authService.register(user)
+  //     .subscribe(data => {
+  //         this.user = data;
+  //         console.log(data);
+  //         this.mode = 1;
+  //       },
+  //       err => {
+  //         this.errorMessage = err.error.message;
+  //         this.mode = 0;
+  //       })
+  // }
 
   toTask() {
     this.router.navigateByUrl("/tasks");

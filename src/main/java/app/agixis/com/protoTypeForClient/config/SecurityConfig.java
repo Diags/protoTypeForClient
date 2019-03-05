@@ -13,8 +13,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import javax.servlet.http.HttpServletResponse;
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -40,9 +38,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .exceptionHandling().authenticationEntryPoint((req, rsp, e) -> rsp.sendError(HttpServletResponse.SC_UNAUTHORIZED))
                 .and()
                 .authorizeRequests()
-                .antMatchers( "/login/**","/signin/**", "/register/**","/sendemail/**","/registrationConfirm/**","/h2/**/**")
+                .antMatchers( "/login/**","/signin/**", "/register/**","/sendemail/**","/h2/**/**")
                 .permitAll()
                 .antMatchers(HttpMethod.POST, "/sendemail/**","/updatetask/**","/savetasks/**").hasAnyAuthority(String.valueOf(RoleEnum.ADMINISTRATOR), String.valueOf(RoleEnum.USER ))
+                .antMatchers(HttpMethod.GET, "/registrationConfirm/**").hasAnyAuthority(String.valueOf(RoleEnum.ADMINISTRATOR), String.valueOf(RoleEnum.USER ))
                 .antMatchers(HttpMethod.DELETE, "/deletetask/**").hasAnyAuthority(String.valueOf(RoleEnum.ADMINISTRATOR), String.valueOf(RoleEnum.USER ))
                 .antMatchers(HttpMethod.PUT, "/updatetask/**").hasAnyAuthority(String.valueOf(RoleEnum.ADMINISTRATOR), String.valueOf(RoleEnum.USER ))
                 .anyRequest().authenticated()

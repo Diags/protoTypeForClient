@@ -6,19 +6,17 @@ import app.agixis.com.protoTypeForClient.model.RoleEnum;
 import app.agixis.com.protoTypeForClient.model.VerificationToken;
 import app.agixis.com.protoTypeForClient.repository.CustomerRepository;
 import app.agixis.com.protoTypeForClient.repository.VerificationTokenRepo;
+import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.RequestContext;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Context;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Locale;
+import java.util.*;
 
 @RestController
 public class CustomerController {
@@ -58,34 +56,30 @@ public class CustomerController {
         cost.setEmail(form.getEmail());
         cost.setPasseWord(bCryptPasswordEncoder.encode(form.getPassword()));
         cost.setRoles(new HashSet<>(Collections.singleton(RoleEnum.USER)));
-        String from = "diaguilybouna@gmail.com";
-        String to = "diaguilybouna@gmail.com";
-        String subject = "JavaMailSender";
-        String token = request.getHeader("postman-token");
+        String token = UUID.randomUUID().toString();
         String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
-        System.out.println(token);
-        logger.info("Customer find", cost);
-        String body = "To confirm your account, please click here :" + " rn "
-                + url + "/signin?token=" + token;
+        String from = "diaguilybouna@gmail.com";
+        String to = cost.getEmail();
+        String subject = "Confirm Registration";
+        String body = " To confirm your account, please click here :" + " <a href= "
+                + url + "/registrationConfirm?token=" + token +" ><a>";
         customerRepository.save(cost);
         verificationTokenService.createVerificationToken(cost, token);
         emailSenderService.sendMail(from, to, subject, body);
         return customerRepository.findByNameOrEmail(form.getEmail(), form.getEmail());
     }
-
     @GetMapping("/registrationConfirm")
-    public Customer confirmRegistration(@RequestParam("token") String token, @Context HttpServletRequest request) throws Exception {
-        String confirmToken = request.getHeader("postman-token");
-        String url = request.getScheme() + "//" + request.getServerName() + ":" + request.getServerPort();
-        System.out.println(token);
-        Locale locale = request.getLocale();
+    public String confirmRegistration(@RequestParam("token") String token) throws Exception {
+        if (Strings.isBlank(token)){
+            throw new IllegalArgumentException("Token is required in confirmRegistration {token} = "+ token);
+        }
         VerificationToken verificationToken = verificationTokenRepo.findByToken(token);
         if (verificationToken == null) {
-            throw new Exception("This token is not available" + token);
+            throw new Exception("This token is not available at confirmRegistration" + token);
         }
         Customer customer = verificationToken.getCustomer();
         if (customer == null) throw new CustomerNotfoundException(customer);
-        return customer;
-
+        verificationToken.setToken(null);
+        return "Confirmation success "+  " redirect to:"+" <a href=http://localhost:4200/login>Longing</a>";
     }
 }

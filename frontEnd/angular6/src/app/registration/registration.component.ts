@@ -28,13 +28,6 @@ export class RegistrationComponent implements OnInit {
           console.log("registration"+data);
           this.user = data;
           this.mode = 1;
-          this.authService.RegistrationConfirm().subscribe(data => {
-            console.log(data);
-          },
-            err => {
-              this.errorMessage = err;
-              this.mode = 0;
-            })
         },
         err => {
           this.errorMessage = err.error.message;

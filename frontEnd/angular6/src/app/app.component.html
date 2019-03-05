@@ -1,4 +1,5 @@
 <app-header (filterList)="onFilter($event)"></app-header>
+<app-task [filter]='filter' *ngIf="!isAuthentificated"></app-task>
 <div class="container">
   <router-outlet></router-outlet>
 </div>

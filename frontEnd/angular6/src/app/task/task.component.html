@@ -1,4 +1,8 @@
-<div class="container" *ngIf="tasks">
+<div class="md-form  active-pink active-pink-2 mb-3 mt-0">
+  <i class="fa fa-search" aria-hidden="true"></i>
+  <input class="form-control"  [(ngModel)]="listFilter" type="text" placeholder="Search" aria-label="Search">
+</div>
+<div class="container" *ngIf="listTaskFilter">
   <div class="panel panel-default">
     <div class="panel-heading">Tasks</div>
     <div class="panel-body">
@@ -10,7 +14,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let task of tasks">
+        <tr *ngFor="let task of listTaskFilter">
           <td>{{task.id}}</td>
           <td><span [routerLink]="['/task-details/',task.id]"><strong>{{task.message}}</strong></span></td>
           <td>

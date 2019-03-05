@@ -2,6 +2,9 @@ package app.agixis.com.protoTypeForClient.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.Date;
 
 @Entity
 public class VerificationToken {
@@ -13,6 +16,14 @@ public class VerificationToken {
     private String token;
     @OneToOne(cascade=CascadeType.ALL)
     private Customer customer;
+    private Date expiryDate;
+
+    private Date calculateExpiryDate(int expiryTimeInMinutes) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Timestamp(cal.getTime().getTime()));
+        cal.add(Calendar.MINUTE, expiryTimeInMinutes);
+        return new Date(cal.getTime().getTime());
+    }
 
     public VerificationToken(String token, Customer user) {
         this.token = token;
@@ -45,5 +56,11 @@ public class VerificationToken {
         this.customer = customer;
     }
 
+    public Date getExpiryDate() {
+        return expiryDate;
+    }
 
+    public void setExpiryDate(Date expiryDate) {
+        this.expiryDate = expiryDate;
+    }
 }

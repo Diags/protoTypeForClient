@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnInit} from '@angular/core';
 import {AuthenticationService} from "../../services/authentication.service";
 import {NavigationEnd, Router} from "@angular/router";
 
@@ -7,39 +7,39 @@ import {NavigationEnd, Router} from "@angular/router";
   templateUrl: './task.component.html',
   styleUrls: ['./task.component.css']
 })
-export class TaskComponent implements OnInit {
+export class TaskComponent implements OnInit, OnChanges {
   tasks;
   listTaskFilter: any = [];
-  listTask;
   private _listFilter: string;
   private currentUrl: string;
   edit: boolean = false;
   tasksCurrent;
+  @Input() private filter: string;
+
+  constructor(private authService: AuthenticationService, private router: Router) {
+    this.router.events.subscribe((_: NavigationEnd) => this.currentUrl = _.url);
+    this.listTaskFilter = this._listFilter ? this.perFormFilter(this.listFilter) : this.tasks;
+
+  }
   get listFilter(): string {
     return this._listFilter;
   }
 
-  // set listFilter(value: string) {
-  //   value = this.authService.getFilter();
-  //   this._listFilter =  value;
-  //   this.listTaskFilter = this._listFilter ? this.perFormFilter(this.listFilter) : this.listTask;
-  // }
-
-  constructor(private authService: AuthenticationService, private router: Router) {
-    this.router.events.subscribe((_: NavigationEnd) => this.currentUrl = _.url);
-    this.listTaskFilter = this._listFilter ? this.perFormFilter(this.listFilter) : this.listTask;
+  set listFilter(value: string) {
+    this._listFilter   = value ;
+    this.listTaskFilter = this._listFilter ? this.perFormFilter(this.listFilter) : this.tasks;
   }
 
   ngOnInit() {
-    this._listFilter = this.authService.getFilter();
     this.getTasks();
+    this.listTaskFilter = this._listFilter ? this.perFormFilter(this.filter) : this.tasks;
+    console.log(this.filter);
   }
 
   getTasks() {
     this.authService.getTasks().subscribe(resp => {
       this.tasks = resp;
-      this.listTask = this.tasks;
-      this.listTaskFilter = this.listTask;
+      this.listTaskFilter = this.tasks;
     }, error1 => {
       this.authService.logout();
       this.router.navigateByUrl("/login");
@@ -49,13 +49,12 @@ export class TaskComponent implements OnInit {
   private perFormFilter(filterby: string) {
     console.log(filterby, "task");
     filterby = filterby.toLocaleLowerCase();
-    return this.listTask.filter(task => {
-      task.message.toLocaleLowerCase().indexOf(filterby);
-    });
-  }
+    return this.tasks.filter(task =>
+      task.message.toLocaleLowerCase().indexOf(filterby) != -1);
+  };
 
   onDeleteTask(id) {
-    let c = confirm("Etes vous sure de supprimer !!")
+    let c = confirm("Êtes vous sure de supprimer !!")
     if (!c) return;
     console.log(id);
     this.authService.deleteTask(id).subscribe(resp => {
@@ -76,4 +75,9 @@ export class TaskComponent implements OnInit {
       console.log(error);
     })
   }
+  ngOnChanges(): void {
+    console.log(this.filter +" task");
+    this.listTaskFilter = this._listFilter ? this.perFormFilter(this.filter) : this.tasks;
+  }
+
 }

@@ -77,7 +77,7 @@ export class AuthenticationService {
   }
 
   register(user: any) {
-    return this.http.post(this.host + "/register", user,{observe: 'response'});
+    return this.http.post(this.host + "/register", user);
   }
   postTask(task) {
     console.log(task);
@@ -100,10 +100,6 @@ export class AuthenticationService {
 
   deleteTask(id: any) {
     return this.http.delete(this.host + "/deletetask/" + id, {headers: new HttpHeaders({'authorization': 'Bearer ' + this.jwtToken})});
-  }
-
-  RegistrationConfirm() {
-    return this.http.get(this.host + "/registrationConfirm?token"+this.jwtToken , {headers: new HttpHeaders({'authorization': this.jwtToken})});
   }
 
   editTask(task) {

@@ -20,6 +20,10 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
             verificationTokenRepo.save(myToken);
     }
 
+    @Override
+    public void deleteVerificationToken(VerificationToken v) {
+        verificationTokenRepo.delete(v);
+    }
 
 
 }

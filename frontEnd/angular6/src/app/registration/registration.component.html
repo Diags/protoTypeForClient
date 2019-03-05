@@ -4,7 +4,7 @@
   </div>
   <div class="panel panel-success" *ngIf="mode==1">
     <div class="panel-heading">
-      <strong>Registration Success</strong>
+      <strong>Confirm your registration in your mail</strong>
     </div>
     <div class="panel-body">
       <ul class="list-group">
@@ -14,9 +14,12 @@
         <li class="list-group-item">
           Your role : {{user.roles[0]}}
         </li>
-        <li style="cursor: pointer" class="list-group-item">
-          <a  routerLink="/login" [class.activated]="currentUrl=='/tasks'"> click to enter </a>
-        </li>
+        <!--<li style="cursor: pointer" class="list-group-item">-->
+          <!--<a  routerLink="/login" [class.activated]="currentUrl=='/tasks'"> click to enter </a>-->
+        <!--</li>-->
+        <!--<li style="cursor: pointer" class="list-group-item">-->
+          <!--<a  routerLink="/login" [class.activated]="currentUrl=='/tasks'"> click to enter </a>-->
+        <!--</li>-->
       </ul>
     </div>
   </div>

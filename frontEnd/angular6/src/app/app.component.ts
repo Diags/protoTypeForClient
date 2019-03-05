@@ -18,11 +18,12 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.autService.logout();
   }
-
+  isAuthentificated() {
+    return this.autService.isAuthentificated();
+  }
 
   onFilter($event: string) {
     this.filter = $event;
-      this.autService.onFilter($event);
-    console.log($event, "je suis parent")
+    console.log(this.filter, "je suis parent")
   }
 }
